@@ -1,10 +1,9 @@
 package mysql
 
 import (
-	"database/sql"
 	"fmt"
-	_ "github.com/go-sql-driver/mysql"
-	"time"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 )
 
 type Config struct {
@@ -16,22 +15,21 @@ type Config struct {
 }
 type Adapter struct {
 	config Config
-	db     *sql.DB
+	db     *gorm.DB
 }
 
-func (m *Adapter) Conn() *sql.DB {
+func (m *Adapter) Conn() *gorm.DB {
 	return m.db
 }
 func New(config Config) Adapter {
-	db, err := sql.Open("mysql", fmt.Sprintf("%s:%s@(%s:%d)/%s?parseTime=true",
-		config.Username, config.Password, config.Host, config.Port, config.DBName))
-	if err != nil {
-		panic(fmt.Errorf("can't open mysql db:%v", err))
-	}
-	// See "Important settings" section.
-	db.SetConnMaxLifetime(time.Minute * 3)
-	db.SetMaxOpenConns(10)
-	db.SetMaxIdleConns(10)
 
+	db, err := gorm.Open(mysql.New(mysql.Config{
+		DriverName: "mysql",
+		DSN: fmt.Sprintf("%s:%s@(%s:%d)/%s?charset=utf8&parseTime=True&loc=Local",
+			config.Username, config.Password, config.Host, config.Port, config.DBName),
+	}), &gorm.Config{})
+	if err != nil {
+		fmt.Errorf("mysql connect err: %v", err)
+	}
 	return Adapter{config: config, db: db}
 }

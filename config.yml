@@ -7,7 +7,7 @@ auth:
 
 mysql:
   port: 3306
-  host: app-db
+  host: 127.0.0.1
   dbname: app_db
   username: root
-  password: wontbeused
+  password: 1234
