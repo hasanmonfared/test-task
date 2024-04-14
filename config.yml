@@ -1,0 +1,13 @@
+type: yml
+
+http_server:
+  port: 8787
+auth:
+  sign_key: hello
+
+mysql:
+  port: 3306
+  host: app-db
+  dbname: app_db
+  username: root
+  password: wontbeused
