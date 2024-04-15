@@ -27,7 +27,9 @@ func New(config Config) Adapter {
 		DriverName: "mysql",
 		DSN: fmt.Sprintf("%s:%s@(%s:%d)/%s?charset=utf8&parseTime=True&loc=Local",
 			config.Username, config.Password, config.Host, config.Port, config.DBName),
-	}), &gorm.Config{})
+	}), &gorm.Config{
+		//Logger: logger.Default.LogMode(logger.Info),
+	})
 	if err != nil {
 		fmt.Errorf("mysql connect err: %v", err)
 	}
