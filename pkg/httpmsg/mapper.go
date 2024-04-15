@@ -1,8 +1,8 @@
 package httpmsg
 
 import (
-	"gameapp/pkg/errmsg"
-	"gameapp/pkg/richerror"
+	"app/pkg/errmsg"
+	"app/pkg/richerror"
 	"net/http"
 )
 

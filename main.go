@@ -5,8 +5,8 @@ import (
 	"app/config"
 	"app/delivery/httpserver"
 	"app/repository/migrator"
+	"context"
 	"fmt"
-	"golang.org/x/net/context"
 	"os"
 	"os/signal"
 	"time"
@@ -18,7 +18,6 @@ func main() {
 	mysqlAdapter := mysql.New(cfg.Mysql)
 	m := migrator.New(mysqlAdapter.Conn())
 	m.Up()
-
 	server := httpserver.New(cfg)
 	go func() {
 		server.Serve()

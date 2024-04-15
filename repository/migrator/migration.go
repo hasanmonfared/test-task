@@ -1,7 +1,7 @@
 package migrator
 
 import (
-	"app/model"
+	"app/model/walletmodel"
 	"gorm.io/gorm"
 )
 
@@ -14,6 +14,6 @@ func New(db *gorm.DB) Migrator {
 }
 func (m Migrator) Up() {
 	m.db.Migrator().AutoMigrate(
-		&model.User{},
+		&walletmodel.Transaction{},
 	)
 }

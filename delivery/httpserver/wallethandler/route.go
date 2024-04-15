@@ -1,4 +1,4 @@
-package userhandler
+package wallethandler
 
 import (
 	"github.com/labstack/echo/v4"
