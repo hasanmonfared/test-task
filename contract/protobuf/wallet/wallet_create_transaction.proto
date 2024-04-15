@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package wallet;
+
+option go_package = "contract/goproto/wallet";
+
+message CreateTransactionRequest{
+  string user = 1;
+  string type = 2 ;
+  float amount = 3;
+
+
+}
+
+message CreateTransactionResponse{
+}
+
+
+service PresenceService{
+  rpc GetPresence(CreateTransactionRequest) returns (CreateTransactionResponse);
+}
