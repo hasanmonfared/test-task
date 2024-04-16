@@ -1,11 +1,26 @@
 package discountservice
 
-import "gorm.io/gorm"
+import (
+	"app/adapter/mysql"
+	"app/adapter/redis"
+	"app/param/discountparam"
+	"golang.org/x/net/context"
+)
 
 type Service struct {
-	db *gorm.DB
+	db    mysql.Adapter
+	redis redis.Adapter
 }
 
-func New(db *gorm.DB) Service {
-	return Service{db: db}
+func New(db mysql.Adapter, redis redis.Adapter) Service {
+	return Service{db: db, redis: redis}
+}
+
+func (s Service) ApplyDiscount(ctx context.Context, req discountparam.ApplyDiscountRequest) (discountparam.ApplyDiscountResponse, error) {
+
+	//Check exists code(validation)
+
+	// lock request
+	// create queue with redis
+	
 }
