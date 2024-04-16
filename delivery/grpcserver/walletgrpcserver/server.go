@@ -3,10 +3,9 @@ package walletgrpcserver
 import (
 	"app/config"
 	"app/contract/goproto/wallet"
-	"app/model/walletmodel"
 	"app/param/walletparam"
+	"app/pkg/protobufmapper"
 	"app/service/walletservice"
-	"errors"
 	"fmt"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
@@ -16,38 +15,29 @@ import (
 
 type Server struct {
 	conf config.Config
-	wallet.UnimplementedPresenceServiceServer
+	wallet.UnimplementedCreateTransactionServiceServer
 	svc walletservice.Service
 }
 
-func New(cfg config.Config) Server {
+func New(cfg config.Config, svc walletservice.Service) Server {
 	return Server{
-		conf:                               cfg,
-		UnimplementedPresenceServiceServer: wallet.UnimplementedPresenceServiceServer{},
+		svc:  svc,
+		conf: cfg,
+		UnimplementedCreateTransactionServiceServer: wallet.UnimplementedCreateTransactionServiceServer{},
 	}
 }
 
 func (s Server) CreateTransaction(ctx context.Context, req *wallet.CreateTransactionRequest) (*wallet.CreateTransactionResponse, error) {
-	var transactionType walletmodel.Type
-	switch req.Type {
-	case wallet.Type_DEPOSIT:
 
-		transactionType = walletmodel.Deposit
-	case wallet.Type_WITHDRAWAL:
-
-		transactionType = walletmodel.Withdrawal
-	default:
-		return nil, errors.New("unsupported transaction type")
-	}
 	resp, err := s.svc.CreateTransaction(ctx, walletparam.CreateTransactionRequest{
 		User:   req.User,
-		Type:   transactionType,
+		Type:   protobufmapper.MapProtobufTypeWalletToParam(req.Type),
 		Amount: float64(req.Amount),
 	})
 	if err != nil {
 		return nil, err
 	}
-	return resp, nil
+	return protobufmapper.MapResponseParamToProtobuf(resp), nil
 }
 
 func (s Server) Start() {
@@ -58,7 +48,7 @@ func (s Server) Start() {
 	}
 
 	grpcServer := grpc.NewServer()
-
+	wallet.RegisterCreateTransactionServiceServer(grpcServer, &s)
 	log.Print("presence grpc server started on ", address)
 	err = grpcServer.Serve(listener)
 	if err != nil {

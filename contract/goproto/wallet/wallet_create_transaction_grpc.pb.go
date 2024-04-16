@@ -18,86 +18,87 @@ import (
 // Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
-// PresenceServiceClient is the client API for PresenceService service.
+// CreateTransactionServiceClient is the client API for CreateTransactionService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type PresenceServiceClient interface {
-	GetPresence(ctx context.Context, in *CreateTransactionRequest, opts ...grpc.CallOption) (*CreateTransactionResponse, error)
+type CreateTransactionServiceClient interface {
+	CreateTransaction(ctx context.Context, in *CreateTransactionRequest, opts ...grpc.CallOption) (*CreateTransactionResponse, error)
 }
 
-type presenceServiceClient struct {
+type createTransactionServiceClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewPresenceServiceClient(cc grpc.ClientConnInterface) PresenceServiceClient {
-	return &presenceServiceClient{cc}
+func NewCreateTransactionServiceClient(cc grpc.ClientConnInterface) CreateTransactionServiceClient {
+	return &createTransactionServiceClient{cc}
 }
 
-func (c *presenceServiceClient) GetPresence(ctx context.Context, in *CreateTransactionRequest, opts ...grpc.CallOption) (*CreateTransactionResponse, error) {
+func (c *createTransactionServiceClient) CreateTransaction(ctx context.Context, in *CreateTransactionRequest, opts ...grpc.CallOption) (*CreateTransactionResponse, error) {
 	out := new(CreateTransactionResponse)
-	err := c.cc.Invoke(ctx, "/wallet.PresenceService/GetPresence", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/wallet.CreateTransactionService/CreateTransaction", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// PresenceServiceServer is the server API for PresenceService service.
-// All implementations must embed UnimplementedPresenceServiceServer
+// CreateTransactionServiceServer is the server API for CreateTransactionService service.
+// All implementations must embed UnimplementedCreateTransactionServiceServer
 // for forward compatibility
-type PresenceServiceServer interface {
-	GetPresence(context.Context, *CreateTransactionRequest) (*CreateTransactionResponse, error)
-	mustEmbedUnimplementedPresenceServiceServer()
+type CreateTransactionServiceServer interface {
+	CreateTransaction(context.Context, *CreateTransactionRequest) (*CreateTransactionResponse, error)
+	mustEmbedUnimplementedCreateTransactionServiceServer()
 }
 
-// UnimplementedPresenceServiceServer must be embedded to have forward compatible implementations.
-type UnimplementedPresenceServiceServer struct {
+// UnimplementedCreateTransactionServiceServer must be embedded to have forward compatible implementations.
+type UnimplementedCreateTransactionServiceServer struct {
 }
 
-func (UnimplementedPresenceServiceServer) GetPresence(context.Context, *CreateTransactionRequest) (*CreateTransactionResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetPresence not implemented")
+func (UnimplementedCreateTransactionServiceServer) CreateTransaction(context.Context, *CreateTransactionRequest) (*CreateTransactionResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateTransaction not implemented")
 }
-func (UnimplementedPresenceServiceServer) mustEmbedUnimplementedPresenceServiceServer() {}
+func (UnimplementedCreateTransactionServiceServer) mustEmbedUnimplementedCreateTransactionServiceServer() {
+}
 
-// UnsafePresenceServiceServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to PresenceServiceServer will
+// UnsafeCreateTransactionServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to CreateTransactionServiceServer will
 // result in compilation errors.
-type UnsafePresenceServiceServer interface {
-	mustEmbedUnimplementedPresenceServiceServer()
+type UnsafeCreateTransactionServiceServer interface {
+	mustEmbedUnimplementedCreateTransactionServiceServer()
 }
 
-func RegisterPresenceServiceServer(s grpc.ServiceRegistrar, srv PresenceServiceServer) {
-	s.RegisterService(&PresenceService_ServiceDesc, srv)
+func RegisterCreateTransactionServiceServer(s grpc.ServiceRegistrar, srv CreateTransactionServiceServer) {
+	s.RegisterService(&CreateTransactionService_ServiceDesc, srv)
 }
 
-func _PresenceService_GetPresence_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _CreateTransactionService_CreateTransaction_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CreateTransactionRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(PresenceServiceServer).GetPresence(ctx, in)
+		return srv.(CreateTransactionServiceServer).CreateTransaction(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/wallet.PresenceService/GetPresence",
+		FullMethod: "/wallet.CreateTransactionService/CreateTransaction",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PresenceServiceServer).GetPresence(ctx, req.(*CreateTransactionRequest))
+		return srv.(CreateTransactionServiceServer).CreateTransaction(ctx, req.(*CreateTransactionRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// PresenceService_ServiceDesc is the grpc.ServiceDesc for PresenceService service.
+// CreateTransactionService_ServiceDesc is the grpc.ServiceDesc for CreateTransactionService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var PresenceService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "wallet.PresenceService",
-	HandlerType: (*PresenceServiceServer)(nil),
+var CreateTransactionService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "wallet.CreateTransactionService",
+	HandlerType: (*CreateTransactionServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "GetPresence",
-			Handler:    _PresenceService_GetPresence_Handler,
+			MethodName: "CreateTransaction",
+			Handler:    _CreateTransactionService_CreateTransaction_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
