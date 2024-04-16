@@ -2,8 +2,8 @@ type: yml
 
 http_server:
   port: 8787
-auth:
-  sign_key: hello
+wallet_grpc_server:
+  port: 9898
 
 mysql:
   port: 3306

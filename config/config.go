@@ -12,9 +12,13 @@ type Application struct {
 type HTTPServer struct {
 	Port int `koanf:"port"`
 }
+type WalletGrpcServer struct {
+	Port int `koanf:"port"`
+}
 type Config struct {
-	Application Application  `koanf:"application"`
-	HTTPServer  HTTPServer   `koanf:"http_server"`
-	Mysql       mysql.Config `koanf:"mysql"`
-	Redis       redis.Config `koanf:"redis"`
+	Application      Application      `koanf:"application"`
+	HTTPServer       HTTPServer       `koanf:"http_server"`
+	WalletGrpcServer WalletGrpcServer `koanf:"wallet_grpc_server"`
+	Mysql            mysql.Config     `koanf:"mysql"`
+	Redis            redis.Config     `koanf:"redis"`
 }
