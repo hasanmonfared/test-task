@@ -45,6 +45,6 @@ func setupServices(cfg config.Config) (discountservice.Service, discountvalidato
 	mysqlAdapter := mysql.New(cfg.Mysql)
 	redisAdapter := redis.New(cfg.Redis)
 	diSvc := discountservice.New(mysqlAdapter, redisAdapter)
-	diVal := discountvalidator.New()
+	diVal := discountvalidator.New(mysqlAdapter)
 	return diSvc, diVal
 }

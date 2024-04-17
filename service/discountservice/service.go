@@ -17,7 +17,6 @@ func New(db mysql.Adapter, redis redis.Adapter) Service {
 }
 
 func (s Service) ApplyDiscount(ctx context.Context, req discountparam.ApplyDiscountRequest) (discountparam.ApplyDiscountResponse, error) {
-
 	panic("implement me")
 	//Check exists code(validation)
 

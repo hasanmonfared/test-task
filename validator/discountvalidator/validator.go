@@ -1,8 +1,13 @@
 package discountvalidator
 
+import "app/adapter/mysql"
+
 type Validator struct {
+	db mysql.Adapter
 }
 
-func New() Validator {
-	return Validator{}
+func New(db mysql.Adapter) Validator {
+	return Validator{
+		db: db,
+	}
 }
