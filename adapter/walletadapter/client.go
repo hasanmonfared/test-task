@@ -32,6 +32,7 @@ func (c Client) CreateTransaction(ctx context.Context, request walletparam.Creat
 			User:   request.User,
 			Type:   protobufmapper.MapTypeWalletParamToProtobuf(request.Type),
 			Amount: float32(request.Amount),
+			Meta:   request.Meta,
 		})
 	if err != nil {
 		return walletparam.CreateTransactionResponse{}, err

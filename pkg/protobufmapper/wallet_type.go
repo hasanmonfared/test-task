@@ -11,6 +11,8 @@ func MapProtobufTypeWalletToParam(t wallet.Type) walletmodel.Type {
 	case wallet.Type_DEPOSIT:
 
 		return walletmodel.Deposit
+	case wallet.Type_IncreaseByGift:
+		return walletmodel.IncreaseByGift
 	case wallet.Type_WITHDRAWAL:
 
 		return walletmodel.Withdrawal
@@ -22,6 +24,8 @@ func MapTypeWalletParamToProtobuf(t walletmodel.Type) wallet.Type {
 	switch t {
 	case walletmodel.Deposit:
 		return wallet.Type_DEPOSIT
+	case walletmodel.IncreaseByGift:
+		return wallet.Type_IncreaseByGift
 	case walletmodel.Withdrawal:
 		return wallet.Type_WITHDRAWAL
 	}

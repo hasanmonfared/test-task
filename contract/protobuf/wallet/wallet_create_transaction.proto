@@ -8,6 +8,7 @@ message CreateTransactionRequest{
   string user = 1;
   Type type = 2 ;
   float amount = 3;
+  string meta=4;
 }
 
 message CreateTransactionResponse{
@@ -16,6 +17,7 @@ message CreateTransactionResponse{
 enum Type {
   DEPOSIT = 0;
   WITHDRAWAL = 1;
+  IncreaseByGift = 2;
   Unknown = 3;
 }
 service CreateTransactionService{

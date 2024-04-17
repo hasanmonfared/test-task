@@ -33,6 +33,7 @@ func (s Server) CreateTransaction(ctx context.Context, req *wallet.CreateTransac
 		User:   req.User,
 		Type:   protobufmapper.MapProtobufTypeWalletToParam(req.Type),
 		Amount: float64(req.Amount),
+		Meta:   req.Meta,
 	})
 	if err != nil {
 		return nil, err
