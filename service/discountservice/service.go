@@ -5,7 +5,6 @@ import (
 	"app/adapter/redis"
 	"app/model/discountmodel"
 	"app/param/discountparam"
-	"app/pkg/errmsg"
 	"app/pkg/richerror"
 	"errors"
 	"golang.org/x/net/context"
@@ -18,8 +17,9 @@ type Service struct {
 	walletServ WalletServer
 }
 type WalletServer interface {
-	CheckUsageDiscount(discount string, user string) bool
-	CreateTransaction(user string, typeT string, amount float64) error
+	//CheckUserUsageDiscount(ctx context.Context, discount string, user string) bool
+	//CheckUsageCountDiscountCode(ctx context.Context,code string) uint64
+	CreateTransaction(ctx context.Context, user string, typeT string, amount float64, meta string) error
 }
 
 func New(db mysql.Adapter, redis redis.Adapter, walletServ WalletServer) Service {
@@ -34,14 +34,14 @@ func (s Service) ApplyDiscount(ctx context.Context, req discountparam.ApplyDisco
 		return discountparam.ApplyDiscountResponse{}, richerror.New(op).WithErr(res.Error).WithKind(richerror.KindInvalid)
 	}
 	//Start lock
-	isUse := s.walletServ.CheckUsageDiscount(req.DiscountCode, req.User)
-	if isUse {
-		return discountparam.ApplyDiscountResponse{}, richerror.New(op).WithKind(richerror.KindInvalid).WithMessage(errmsg.ErrorMsgAlreadyUsedCode)
-	}
-	err := s.walletServ.CreateTransaction(req.User, "increase_by_gift", topCode.Amount)
+	//isUse := s.walletServ.CheckUsageDiscount(ctx, req.DiscountCode, req.User)
+	//if isUse {
+	//	return discountparam.ApplyDiscountResponse{}, richerror.New(op).WithKind(richerror.KindInvalid).WithMessage(errmsg.ErrorMsgAlreadyUsedCode)
+	//}
+	err := s.walletServ.CreateTransaction(ctx, req.User, "increase_by_gift", topCode.Amount, topCode.Code)
 	//End lock
 	if err != nil {
-		return discountparam.ApplyDiscountResponse{}, richerror.New(op).WithKind(richerror.KindInvalid).WithMessage(errmsg.ErrorMsgAlreadyUsedCode)
+		return discountparam.ApplyDiscountResponse{}, richerror.New(op).WithKind(richerror.KindInvalid).WithErr(err)
 	}
 	return discountparam.ApplyDiscountResponse{}, nil
 }

@@ -2,9 +2,8 @@ package walletadapter
 
 import (
 	"app/contract/goproto/wallet"
-	"app/param/walletparam"
 	"app/pkg/protobufmapper"
-	"golang.org/x/net/context"
+	"context"
 	"google.golang.org/grpc"
 )
 
@@ -18,25 +17,32 @@ func New(address string) Client {
 	}
 }
 
-func (c Client) CreateTransaction(ctx context.Context, request walletparam.CreateTransactionRequest) (walletparam.CreateTransactionResponse, error) {
+func (c Client) CreateTransaction(ctx context.Context, user string, typeT string, amount float64, meta string) error {
 	conn, err := grpc.Dial(c.address, grpc.WithInsecure())
 	if err != nil {
-		return walletparam.CreateTransactionResponse{}, err
+		return err
 	}
 	defer conn.Close()
 
 	client := wallet.NewCreateTransactionServiceClient(conn)
 
-	resp, err := client.CreateTransaction(ctx,
+	_, eErr := client.CreateTransaction(ctx,
 		&wallet.CreateTransactionRequest{
-			User:   request.User,
-			Type:   protobufmapper.MapTypeWalletParamToProtobuf(request.Type),
-			Amount: float32(request.Amount),
-			Meta:   request.Meta,
+			User:   user,
+			Type:   protobufmapper.MapTypeStringToProtobuf(typeT),
+			Amount: float32(amount),
+			Meta:   meta,
 		})
-	if err != nil {
-		return walletparam.CreateTransactionResponse{}, err
+	if eErr != nil {
+		return eErr
 	}
 
-	return protobufmapper.MapProtobufToResponseParam(resp), nil
+	return nil
 }
+
+//func (c Client) CheckUserUsageDiscount(ctx context.Context, discount string, user string) bool {
+//
+//}
+//func CheckUsageCountDiscountCode(ctx context.Context, code string) uint64 {
+//
+//}

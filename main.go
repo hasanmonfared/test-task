@@ -3,6 +3,7 @@ package main
 import (
 	"app/adapter/mysql"
 	"app/adapter/redis"
+	"app/adapter/walletadapter"
 	"app/config"
 	"app/delivery/httpserver"
 	"app/repository/migrator"
@@ -44,7 +45,10 @@ func setupServices(cfg config.Config) (discountservice.Service, discountvalidato
 	// MYSQL
 	mysqlAdapter := mysql.New(cfg.Mysql)
 	redisAdapter := redis.New(cfg.Redis)
-	diSvc := discountservice.New(mysqlAdapter, redisAdapter)
+	walletGrpc := fmt.Sprintf(":%d", cfg.WalletGrpcServer.Port)
+	walletAdapter := walletadapter.New(walletGrpc)
+
+	diSvc := discountservice.New(mysqlAdapter, redisAdapter, walletAdapter)
 	diVal := discountvalidator.New(mysqlAdapter)
 	return diSvc, diVal
 }

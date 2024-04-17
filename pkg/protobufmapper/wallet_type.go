@@ -37,3 +37,14 @@ func MapResponseParamToProtobuf(res walletparam.CreateTransactionResponse) *wall
 func MapProtobufToResponseParam(res *wallet.CreateTransactionResponse) walletparam.CreateTransactionResponse {
 	return walletparam.CreateTransactionResponse{}
 }
+func MapTypeStringToProtobuf(s string) wallet.Type {
+	switch s {
+	case "deposit":
+		return wallet.Type_DEPOSIT
+	case "increase_by_gift":
+		return wallet.Type_IncreaseByGift
+	case "withdrawal":
+		return wallet.Type_WITHDRAWAL
+	}
+	return wallet.Type_Unknown
+}
