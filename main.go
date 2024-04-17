@@ -2,9 +2,12 @@ package main
 
 import (
 	"app/adapter/mysql"
+	"app/adapter/redis"
 	"app/config"
 	"app/delivery/httpserver"
 	"app/repository/migrator"
+	"app/service/discountservice"
+	"app/validator/discountvalidator"
 	"fmt"
 	"golang.org/x/net/context"
 	"os"
@@ -18,7 +21,8 @@ func main() {
 	mysqlAdapter := mysql.New(cfg.Mysql)
 	m := migrator.New(mysqlAdapter.Conn())
 	m.Up()
-	server := httpserver.New(cfg)
+	discountSvc, discountValidator := setupServices(cfg)
+	server := httpserver.New(cfg, discountSvc, discountValidator)
 	go func() {
 		server.Serve()
 	}()
@@ -35,4 +39,12 @@ func main() {
 	}
 	time.Sleep(cfg.Application.GracefulShutdownTimeout)
 	<-ctxWithTimeout.Done()
+}
+func setupServices(cfg config.Config) (discountservice.Service, discountvalidator.Validator) {
+	// MYSQL
+	mysqlAdapter := mysql.New(cfg.Mysql)
+	redisAdapter := redis.New(cfg.Redis)
+	diSvc := discountservice.New(mysqlAdapter, redisAdapter)
+	diVal := discountvalidator.New()
+	return diSvc, diVal
 }

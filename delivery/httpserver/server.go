@@ -3,6 +3,8 @@ package httpserver
 import (
 	"app/config"
 	"app/delivery/httpserver/discounthandler"
+	"app/service/discountservice"
+	"app/validator/discountvalidator"
 	"fmt"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -14,10 +16,11 @@ type Server struct {
 	discountHandler discounthandler.Handler
 }
 
-func New(config config.Config) Server {
+func New(config config.Config, discountSvc discountservice.Service, discountValidator discountvalidator.Validator) Server {
 	return Server{
-		config: config,
-		Router: echo.New(),
+		config:          config,
+		Router:          echo.New(),
+		discountHandler: discounthandler.New(discountSvc, discountValidator),
 	}
 }
 
