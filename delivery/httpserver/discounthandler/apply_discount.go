@@ -14,14 +14,14 @@ func (h Handler) applyDiscount(c echo.Context) error {
 	if err := c.Bind(&req); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest)
 	}
-	if filedErrors, err := h.validation.ValidateApplyDiscountRequest(req); err != nil {
-		msg, code := httpmsg.Error(err)
-		return c.JSON(code, echo.Map{
-			"message": msg,
-			"errors":  filedErrors,
-		})
-		return echo.NewHTTPError(code, msg, filedErrors)
-	}
+	//if filedErrors, err := h.validation.ValidateApplyDiscountRequest(req); err != nil {
+	//	msg, code := httpmsg.Error(err)
+	//	return c.JSON(code, echo.Map{
+	//		"message": msg,
+	//		"errors":  filedErrors,
+	//	})
+	//	return echo.NewHTTPError(code, msg, filedErrors)
+	//}
 
 	resp, err := h.svc.ApplyDiscount(c.Request().Context(), req)
 	if err != nil {
